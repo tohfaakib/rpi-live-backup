@@ -4,6 +4,9 @@ Backing up raspberry pi image live. With this script we can back up the image wh
 ### Usage
 ```sudo ./backup.sh```
 
+### General Instruction
+Adjust destination path and booted device in the script.
+
 ### Dependencies
 Install PiShrink from here,
 https://github.com/Drewsif/PiShrink
