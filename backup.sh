@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Setting up directories
-#SUBDIR=raspberrypi_backups
-DIR=/srv/dev-disk-by-uuid-721b4bd9-10b2-46bb-a1f3-566d5e6a895f/raspberrypi_backups
+DIR=<path to usb storage or mounted network drive>
 
 echo "Starting RaspberryPI backup process!"
 
@@ -43,7 +42,8 @@ service cron stop
 # Begin the backup process, should take about 1 hour from 8Gb SD card to HDD
 echo "Backing up SD card to USB HDD."
 echo "This will take some time depending on your SD card size and read performance. Please wait..."
-SDSIZE=`blockdev --getsize64 /dev/sdb`;
+# add booted device below(/dev/sd...)
+SDSIZE=`blockdev --getsize64 /dev/sdb`;  
 pv -tpreb /dev/sdb -s $SDSIZE | dd of=$OFILE bs=1M conv=sync,noerror iflag=fullblock
 
 # Wait for DD to finish and catch result
@@ -62,7 +62,6 @@ if [ $RESULT = 0 ];
       # rm -f $DIR/backup_*.tar.gz
       mv $OFILE $OFILEFINAL
       echo "Backup is being shrinked. Please wait..."
-      #tar zcf $OFILEFINAL.tar.gz $OFILEFINAL
       pishrink.sh -z $OFILEFINAL
       #rm -rf $OFILEFINAL
       echo "RaspberryPI backup process completed! FILE: $OFILEFINAL"
